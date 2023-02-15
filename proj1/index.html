@@ -35,22 +35,24 @@
 <h2 align="middle">Overview</h2>
 <!-- <p>Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.</p> -->
 <p1>
-I think it's really cool that we built a rasterizer. It is very interesting to think about how although everything on a computer technically exists digitally as 1s and 0s, the graph functions that they represent are analog enough to the degree that we need to sample them.
+  I think it's really cool that we built a rasterizer. It is very interesting to think about how although everything on a computer technically exists digitally as 1s and 0s, the graph functions that they represent are analog enough to the degree that we need to sample them.
 </p1>
 
 <h2 align="middle">Section I: Rasterization</h2>
 
 <h3 align="middle">Part 1: Rasterizing single-color triangles</h3>
-<p1>We rasterize by taking samples at the middle of each pixel. Since a triangle can be represented by the intersection of 3 half-planes, we test each sample point with 3 line tests to determine if that pixel falls on or on the same side of all 3 lines that create the triangle, in which case we fill the pixel.
-<br/>
-Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because it is exacty one that checks each sample within the bounding box of the triangle, as that is exactly what we do.</p1>
+<p1>
+  We rasterize by taking samples at the middle of each pixel. Since a triangle can be represented by the intersection of 3 half-planes, we test each sample point with 3 line tests to determine if that pixel falls on or on the same side of all 3 lines that create the triangle, in which case we fill the pixel.
+  <br/>
+  Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because it is exacty one that checks each sample within the bounding box of the triangle, as that is exactly what we do.
 
-<div align="middle">
-	<img src="images/1-basictest4.png" align="middle" width="600px"/>
-	<figcaption align="middle">Floaties caused by aliasing.</figcaption>
-</div>
+  <div align="middle">
+    <img src="images/1-basictest4.png" align="middle" width="600px"/>
+    <figcaption align="middle">Floaties caused by aliasing.</figcaption>
+  </div>
 
-<p1>The above image shows basic rasterization on 4 triangles. Aliasing is evident, especially when zoomed in on the tip of the purple triangle. This is because the tip of that triangle has a width less than 1 pixel wide, and since we only sample in the middle of the pixel at intervals of 1 pixel, it is possible for part of the triangle to exist between our two sample points and not get captured, but a future part that happens to lie on our sample point, resulting gin these floaties.</p1>
+  The above image shows basic rasterization on 4 triangles. Aliasing is evident, especially when zoomed in on the tip of the purple triangle. This is because the tip of that triangle has a width less than 1 pixel wide, and since we only sample in the middle of the pixel at intervals of 1 pixel, it is possible for part of the triangle to exist between our two sample points and not get captured, but a future part that happens to lie on our sample point, resulting gin these floaties.
+</p1>
 
 <!-- 
 <p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
@@ -84,7 +86,8 @@ Our algorithm is no worse than one that checks each sample within the bounding b
 
 
 <h3 align="middle">Part 2: Antialiasing triangles</h3>
-<p1>To perform antialiasing, we supersampled the images.
+<p1>
+  To perform antialiasing, we supersampled the images.
   Originally, the rasterization process involved creating a sample buffer of each pixel which was then
   added to the frame buffer. Instead, we created a set of n x n pixels (where n is sqrt(sample_rate))
   for each original pixel and used these to generate a much larger image, with dimensions
@@ -92,7 +95,6 @@ Our algorithm is no worse than one that checks each sample within the bounding b
   and averaged the colors together to get a single amortized colored pixel, which was put into the frame buffer.
   This gave us a frame buffer with the same number of pixels as the original image but now with certain pixels
   (especially those near the edges) having less extreme colors, reducing aliasing.
-
   <br>
   <div align="middle">
     <table style="width=100%">
@@ -125,15 +127,14 @@ Our algorithm is no worse than one that checks each sample within the bounding b
 
 
 <h3 align="middle">Part 3: Transforms</h3>
-<p1>Implementing 2D transformations involved creating the 3x3 transformation matricies using homogenous coordinates.
-
-<div align="middle">
-	<img src="images/3-my-robot.png" align="middle" width="600px">
-	<figcaption align="middle">Baller robot.</figcaption>
-</div>
-
-</br>
-I increased the scale of the robot's head to be more proportional to their body, rotated the robot's legs to be in a more atheletic stance, scaled their feet to be cool green basketball shoes, and rotated their arm to be able to better grasp the basketball. I noticed that due to the heirarchical representation of the robot, rotating the arm resulted in both the upper and lower arm rotating together.
+<p1>
+    Implementing 2D transformations involved creating the 3x3 transformation matricies using homogenous coordinates.
+  <div align="middle">
+    <img src="images/3-my-robot.png" align="middle" width="600px">
+    <figcaption align="middle">Baller robot.</figcaption>
+  </div>
+  </br>
+  I increased the scale of the robot's head to be more proportional to their body, rotated the robot's legs to be in a more atheletic stance, scaled their feet to be cool green basketball shoes, and rotated their arm to be able to better grasp the basketball. I noticed that due to the heirarchical representation of the robot, rotating the arm resulted in both the upper and lower arm rotating together.
 </p1>
 
 
@@ -141,60 +142,114 @@ I increased the scale of the robot's head to be more proportional to their body,
 
 <h3 align="middle">Part 4: Barycentric coordinates</h3>
 <p1>
-Barycentric coordinates are a way of representing coordinates within a triangle. Given the 3 vertecies that make up a triangle, each point within the triangle can be represented by the sum of some vector multiplited by each of those vertecies. This is very useful for interpolation, as an example, the triangle below has one red, one green, and one blue vertex. At the red vertex it is 100% red and 0% blue and green, resulting in only red. In the middle of the triangle it is 50% red, 50% blue, and 50% green, resulting in a gray color. The midpoint of the left edge of the triangle is 50% red, 50% blue, and 0% green, resulting in a purple color.
-<div align="middle">
-  <table style="width=100%">
-    <tr>
-      <td>
-        <img src="images/4-3colortriangle.png" align="middle" width="400px">
-        <figcaption align="middle">Barycentric coordinates example.</figcaption>
-      </td>
-      <td>
-        <img src="images/4-basictest7.png" align="middle" width="400px">
-        <figcaption align="middle">Basic test 7.</figcaption>
-      </td>
-    </tr>
-  </table>
-</div>
-</p1>
-
-
-<h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
-<p1>
-  Pixel sampling for texture mapping is quite similar to sampling for triangle rasterization. For each pixel of the object, we sample a pixel of the texture and apply it to the object. The two ways of sampling are nearest and bilinear. Nearest takes the floor of the sample point coordinates and applies the texture pixel at those coordinates. Bilinear takes the 4 nearest texture pixels from the sample point and averages them based on distance from the sample point, with the closest one having the highest weight.
-
+  Barycentric coordinates are a way of representing coordinates within a triangle. Given the 3 vertecies that make up a triangle, each point within the triangle can be represented by the sum of some vector multiplited by each of those vertecies. This is very useful for interpolation, as an example, the triangle below has one red, one green, and one blue vertex. At the red vertex it is 100% red and 0% blue and green, resulting in only red. In the middle of the triangle it is 50% red, 50% blue, and 50% green, resulting in a gray color. The midpoint of the left edge of the triangle is 50% red, 50% blue, and 0% green, resulting in a purple color.
   <div align="middle">
     <table style="width=100%">
       <tr>
         <td>
-          <img src="images/image4.png" align="middle" width="400px"/>
+          <img src="images/4-3colortriangle.png" align="middle" width="400px">
+          <figcaption align="middle">Barycentric coordinates example.</figcaption>
+        </td>
+        <td>
+          <img src="images/4-basictest7.png" align="middle" width="400px">
+          <figcaption align="middle">Basic test 7.</figcaption>
+        </td>
+      </tr>
+    </table>
+  </div>
+</p1>
+
+<p1>
+  To perform texture mapping, we perform "pixel sampling" by calculating the barycentric coordinates
+  of the original coordinate point in uv space, and mapping it to the corresponding coordinate in the texture map.
+  We then rasterize the image using each pixel's respective color from the texture map.
+  <br>
+  In nearest sampling, we choose the pixel in the texture that is closest to the uv coordinate.
+  In bilinear sampling, we perform linear interpolation on the four closest pixels to generate
+  a weighted average color.
+  <div align="middle">
+    <table style="width=100%">
+      <tr>
+        <td>
+          <img src="images/svg_5_nearest_sample_1.png" align="middle" width="400px"/>
           <figcaption align="middle">Nearest sampling at 1 sample per pixel.</figcaption>
         </td>
         <td>
-          <img src="images/image4.png" align="middle" width="400px"/>
+          <img src="images/svg_5_nearest_sample_16.png" align="middle" width="400px"/>
           <figcaption align="middle">Nearest sampling at 16 samples per pixel.</figcaption>
         </td>
       </tr>
       <br>
       <tr>
         <td>
-          <img src="images/image4.png" align="middle" width="400px"/>
+          <img src="images/svg_5_bilinear_sample_1.png" align="middle" width="400px"/>
           <figcaption align="middle">Bilinear sampling at 1 sample per pixel.</figcaption>
         </td>
         <td>
-          <img src="images/image4.png" align="middle" width="400px"/>
+          <img src="images/svg_5_bilinear_sample_16.png" align="middle" width="400px"/>
           <figcaption align="middle">Bilinear sampling at 16 samples per pixel.</figcaption>
         </td>
       </tr>
     </table>
   </div>
-  </br>
-  Pixel sampling faces the same aliasing issues as seen previously. When the texture resolution and object resolution are the same, nearest sampling works best, as there will be a 1 to 1 mapping between each pixel on the object and each pixel on the texture. Bilinear might not work as well in this case depending on the sampling point chosen, as if we choose the corner  of a pixel it will average the 4 nearest, resulting is a less clear texture when compared to the nearest sampling, while requiring 4 times as many samples.
-  <br/>
-  When the texture resolution and object resolution are different, bilinear will work better than nearest. If the texture resolution is greater than the ojbect resolution, we get minification, nearest sampling will skip multiple texture pixels between each object pixel, resulting is a really 'jumpy' texture. If the texture resolution is less than the object resolution, we get magnification, nearest sampling will then use the same texture pixel for multiple object pixels, resulting in very jagged lines. In both these cases, bilinear sampling will create a smoother outcome.
+
+  <br>
+  We see that there is a large difference between nearest sampling with a sample rate of 1 and
+  all the other sampling methods. Because nearest sampling just takes a close texture pixel, it
+  may not have the intended value especially in areas where the pixels change color rapidly. However,
+  this effect is lessened when used alongside supersampling, where the extra pixel samples result in a more
+  averaged color. Bilinear sampling has a similar effect to supersampling in that it results in an averaged
+  color output that is less aliased.
+  <br>
+  We would expect the largest difference between nearest and bilinear sampling when used with a low sampling rate
+  as well as on an image with high frequency/color shifts.
 </p1>
 
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
+<p1>
+  To perform level sampling, we follow the same steps as above for pixel sampling where we first get the barycentric
+  coordinates and calculate the uv coordinates. We then also calculate du/dx, dv/dx, du/dy, and dv/dy by calculating
+  the barycentric coordinates of (x + 1, y) and (x, y + 1), and use these to calculate the level D. The level tells
+  us which mipmap to grab the texture colors from.
+  <br>
+  For level zero, we always used the zeroth level mipmap, which is essentially just part 5.
+  For nearest level, we rounded the level to the nearest integer and used that level of mipmap.
+  For linear, we took a weighted sum of the levels above and below the calculated level to use as the texture.
+  <br>
+  Level zero is the fastest and uses the least memory (as we only have to store the level 0 mipmap), but it
+  lacks the level of fine detail that the other methods have and thus has the highest aliasing.
+  Nearest level is in between linear and zero level, with better antialiasing and medium speed/memory cost, while
+  linear level sampling is the most expensive as it has to hold multiple mip levels in memory but results in the
+  best antialiasing due to the interpolation smoothing out the texture.
+  <div align="middle">
+    <table style="width=100%">
+      <tr>
+        <td>
+          <img src="images/svg_pikachu_zero_nearest.png" align="middle" width="400px"/>
+          <figcaption align="middle">Level zero, nearest pixel. </figcaption>
+        </td>
+        <td>
+          <img src="images/svg_pikachu_zero_linear.png" align="middle" width="400px"/>
+          <figcaption align="middle">Level zero, bilinear pixel. </figcaption>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td>
+          <img src="images/svg_pikachu_nearest_nearest.png" align="middle" width="400px"/>
+          <figcaption align="middle">Nearest level, nearest pixel.</figcaption>
+        </td>
+        <td>
+          <img src="images/svg_pikachu_nearest_linear.png" align="middle" width="400px"/>
+          <figcaption align="middle">Nearest level, bilinear pixel. </figcaption>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  We see that in the level zero images the light from the eye stands out sharply in contrast to the background,
+  while in the nearest level images it is more subdued and blurred.
+</p1>
 
 
 
