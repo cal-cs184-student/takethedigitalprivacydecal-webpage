@@ -1,7 +1,167 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Project 1 here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Rasterizer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
+<h1 align="middle">Project 1: Rasterizer</h1>
+<h2 align="middle">CS184-takethedigitalprivacydegal</h2>
+<h2 align="middle">Maxwell Lo, Charlie Chen</h2>
+
+<br><br>
+
+<div>
+
+<h2 align="middle">Overview</h2>
+<p>Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.</p>
+
+<h2 align="middle">Section I: Rasterization</h2>
+
+<h3 align="middle">Part 1: Rasterizing single-color triangles</h3>
+<p1>We rasterize by taking samples at the middle of each pixel. Since a triangle can be represented by the intersection of 3 half-planes, we test each sample point with 3 line tests to determine if that pixel falls on or on the same side of all 3 lines that create the triangle, in which case we fill the pixel.
+
+Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because it is equal to one that checks each sample within the bounding box of the triangle, as that is exactly what we do.</p1>
+
+<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="images/image1.png" align="middle" width="400px"/>
+        <figcaption align="middle">Caption goes here.</figcaption>
+      </td>
+      <td>
+        <img src="images/image2.png" align="middle" width="400px"/>
+        <figcaption align="middle">Caption goes here.</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td>
+        <img src="images/image3.png" align="middle" width="400px"/>
+        <figcaption align="middle">Caption goes here.</figcaption>
+      </td>
+      <td>
+        <img src="images/image4.png" align="middle" width="400px"/>
+        <figcaption align="middle">Caption goes here.</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<h3 align="middle">Part 2: Antialiasing triangles</h3>
+<p1>To perform antialiasing, we supersampled the images.
+  Originally, the rasterization process involved creating a sample buffer of each pixel which was then
+  added to the frame buffer. Instead, we created a set of n x n pixels (where n is sqrt(sample_rate))
+  for each original pixel and used these to generate a much larger image, with dimensions
+  (width * height * sample_rate). After the large image was generated, we then collected every n x n square
+  and averaged the colors together to get a single amortized colored pixel, which was put into the frame buffer.
+  This gave us a frame buffer with the same number of pixels as the original image but now with certain pixels
+  (especially those near the edges) having less extreme colors, reducing aliasing.
+
+  <br>
+  <div align="middle">
+    <table style="width=100%">
+      <tr>
+        <td>
+          <img src="images/basic_4_sample_1.png" align="middle" width="300px">
+          <figcaption align="middle">Triangle with sample rate of 1</figcaption>
+        </td>
+        <td>
+          <img src="images/basic_4_sample_4.png" align="middle" width="300px">
+          <figcaption align="middle">Triangles with sample rate of 4.</figcaption>
+        </td>
+        <td>
+          <img src="images/basic_4_sample_16.png" align="middle" width="300px">
+          <figcaption align="middle">Triangles with sample rate of 16.</figcaption>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  We see that when we sample with a sampling rate of 1, the image only has either dark red or white pixels,
+  as there is nothing to average into. This results in an image with more jagged edges.
+  <br>
+  When we sample with a sampling rate of 4, we begin to have some non-purely dark red or white pixels,
+  instead having some lighter red pixels that round out the shape. This reduces aliasing.
+  <br>
+  When we sample at a rate of 16, there is even less aliasing, and even the zoomed in version of the image appears
+  much more smooth than the other two images.
+
+
+</p1>
+
+
+<h3 align="middle">Part 3: Transforms</h3>
+<p1>Implementing 2D transformations involved creating the 3x3 transformation matricies using homogenous coordinates.</p1>
+
+
+<h2 align="middle">Section II: Sampling</h2>
+
+<h3 align="middle">Part 4: Barycentric coordinates</h3>
+<p1>Barycentric coordinates are a way of representing coordinates within a triangle. Given the 3 vertecies that make up a triangle, each point within the triangle can be represented by the sum of some vector from the 3 vertecies. Interpolation of color in Barycentric coordinates involves scaling the color at each vertex by its distance away from that vertex, and summing all 3 vertecies. </p1>
+
+
+<h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
+<p1>
+  Pixel sampling involves .
+  <div align="middle">
+    <table style="width=100%">
+      <tr>
+        <td>
+          <img src="images/image4.png" align="middle" width="400px"/>
+          <figcaption align="middle">Nearest sampling at 1 sample per pixel.</figcaption>
+        </td>
+        <td>
+          <img src="images/image4.png" align="middle" width="400px"/>
+          <figcaption align="middle">Nearest sampling at 16 samples per pixel.</figcaption>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td>
+          <img src="images/image4.png" align="middle" width="400px"/>
+          <figcaption align="middle">Bilinear sampling at 1 sample per pixel.</figcaption>
+        </td>
+        <td>
+          <img src="images/image4.png" align="middle" width="400px"/>
+          <figcaption align="middle">Bilinear sampling at 16 samples per pixel.</figcaption>
+        </td>
+      </tr>
+    </table>
+  </div>
+</p1>
+
+<h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
+
+
+
+<h2 align="middle">Section III: Art Competition</h2>
+<p>If you are not participating in the optional art competition, don't worry about this section!</p>
+
+<h3 align="middle">Part 7: Draw something interesting!</h3>
+
+</body>
 </html>
