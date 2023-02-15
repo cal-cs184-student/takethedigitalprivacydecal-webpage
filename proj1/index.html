@@ -33,15 +33,26 @@
 <div>
 
 <h2 align="middle">Overview</h2>
-<p>Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.</p>
+<!-- <p>Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.</p> -->
+<p1>
+I think it's really cool that we built a rasterizer. It is very interesting to think about how although everything on a computer technically exists digitally as 1s and 0s, the graph functions that they represent are analog enough to the degree that we need to sample them.
+</p1>
 
 <h2 align="middle">Section I: Rasterization</h2>
 
 <h3 align="middle">Part 1: Rasterizing single-color triangles</h3>
 <p1>We rasterize by taking samples at the middle of each pixel. Since a triangle can be represented by the intersection of 3 half-planes, we test each sample point with 3 line tests to determine if that pixel falls on or on the same side of all 3 lines that create the triangle, in which case we fill the pixel.
+<br/>
+Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because it is exacty one that checks each sample within the bounding box of the triangle, as that is exactly what we do.</p1>
 
-Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because it is equal to one that checks each sample within the bounding box of the triangle, as that is exactly what we do.</p1>
+<div align="middle">
+	<img src="images/1-basictest4.png" align="middle" width="600px"/>
+	<figcaption align="middle">Floaties caused by aliasing.</figcaption>
+</div>
 
+<p1>The above image shows basic rasterization on 4 triangles. Aliasing is evident, especially when zoomed in on the tip of the purple triangle. This is because the tip of that triangle has a width less than 1 pixel wide, and since we only sample in the middle of the pixel at intervals of 1 pixel, it is possible for part of the triangle to exist between our two sample points and not get captured, but a future part that happens to lie on our sample point, resulting gin these floaties.</p1>
+
+<!-- 
 <p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 
 <div align="middle">
@@ -68,7 +79,8 @@ Our algorithm is no worse than one that checks each sample within the bounding b
       </td>
     </tr>
   </table>
-</div>
+</div> 
+-->
 
 
 <h3 align="middle">Part 2: Antialiasing triangles</h3>
@@ -109,24 +121,48 @@ Our algorithm is no worse than one that checks each sample within the bounding b
   <br>
   When we sample at a rate of 16, there is even less aliasing, and even the zoomed in version of the image appears
   much more smooth than the other two images.
-
-
 </p1>
 
 
 <h3 align="middle">Part 3: Transforms</h3>
-<p1>Implementing 2D transformations involved creating the 3x3 transformation matricies using homogenous coordinates.</p1>
+<p1>Implementing 2D transformations involved creating the 3x3 transformation matricies using homogenous coordinates.
+
+<div align="middle">
+	<img src="images/3-my-robot.png" align="middle" width="600px">
+	<figcaption align="middle">Baller robot.</figcaption>
+</div>
+
+</br>
+I increased the scale of the robot's head to be more proportional to their body, rotated the robot's legs to be in a more atheletic stance, scaled their feet to be cool green basketball shoes, and rotated their arm to be able to better grasp the basketball. I noticed that due to the heirarchical representation of the robot, rotating the arm resulted in both the upper and lower arm rotating together.
+</p1>
 
 
 <h2 align="middle">Section II: Sampling</h2>
 
 <h3 align="middle">Part 4: Barycentric coordinates</h3>
-<p1>Barycentric coordinates are a way of representing coordinates within a triangle. Given the 3 vertecies that make up a triangle, each point within the triangle can be represented by the sum of some vector from the 3 vertecies. Interpolation of color in Barycentric coordinates involves scaling the color at each vertex by its distance away from that vertex, and summing all 3 vertecies. </p1>
+<p1>
+Barycentric coordinates are a way of representing coordinates within a triangle. Given the 3 vertecies that make up a triangle, each point within the triangle can be represented by the sum of some vector multiplited by each of those vertecies. This is very useful for interpolation, as an example, the triangle below has one red, one green, and one blue vertex. At the red vertex it is 100% red and 0% blue and green, resulting in only red. In the middle of the triangle it is 50% red, 50% blue, and 50% green, resulting in a gray color. The midpoint of the left edge of the triangle is 50% red, 50% blue, and 0% green, resulting in a purple color.
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="images/4-3colortriangle.png" align="middle" width="400px">
+        <figcaption align="middle">Barycentric coordinates example.</figcaption>
+      </td>
+      <td>
+        <img src="images/4-basictest7.png" align="middle" width="400px">
+        <figcaption align="middle">Basic test 7.</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+</p1>
 
 
 <h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
 <p1>
-  Pixel sampling involves .
+  Pixel sampling for texture mapping is quite similar to sampling for triangle rasterization. For each pixel of the object, we sample a pixel of the texture and apply it to the object. The two ways of sampling are nearest and bilinear. Nearest takes the floor of the sample point coordinates and applies the texture pixel at those coordinates. Bilinear takes the 4 nearest texture pixels from the sample point and averages them based on distance from the sample point, with the closest one having the highest weight.
+
   <div align="middle">
     <table style="width=100%">
       <tr>
@@ -152,6 +188,10 @@ Our algorithm is no worse than one that checks each sample within the bounding b
       </tr>
     </table>
   </div>
+  </br>
+  Pixel sampling faces the same aliasing issues as seen previously. When the texture resolution and object resolution are the same, nearest sampling works best, as there will be a 1 to 1 mapping between each pixel on the object and each pixel on the texture. Bilinear might not work as well in this case depending on the sampling point chosen, as if we choose the corner  of a pixel it will average the 4 nearest, resulting is a less clear texture when compared to the nearest sampling, while requiring 4 times as many samples.
+  <br/>
+  When the texture resolution and object resolution are different, bilinear will work better than nearest. If the texture resolution is greater than the ojbect resolution, we get minification, nearest sampling will skip multiple texture pixels between each object pixel, resulting is a really 'jumpy' texture. If the texture resolution is less than the object resolution, we get magnification, nearest sampling will then use the same texture pixel for multiple object pixels, resulting in very jagged lines. In both these cases, bilinear sampling will create a smoother outcome.
 </p1>
 
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
