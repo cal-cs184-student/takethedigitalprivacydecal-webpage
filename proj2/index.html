@@ -53,6 +53,12 @@
     implemented various operations for modifying triangle meshes. While implementing Bezier curves
     were straightforward, it was interesting to see how it could be expanded to drawing the Bezier
     surface as well. 
+    <br>
+    We found it difficult to implement the triangle mesh functions due to it being hard to visualize 
+    the relationships between various arbitrary mesh elements and determine the cause of visual artifacts. 
+    Especially with the loop subdivision section, it was unclear which part of the implementation was 
+    broken and causing the image to become spiky (it ended up being that we iterated through halfedges 
+    incorrectly, doing halfedge->vertex->halfedge and expecting it to go back to the original halfedge).
 </p>
 <br>
 
