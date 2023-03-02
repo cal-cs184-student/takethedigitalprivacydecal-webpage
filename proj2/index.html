@@ -55,7 +55,7 @@
     surface as well. 
     <br>
     We found it difficult to implement the triangle mesh functions due to it being hard to visualize 
-    the relationships between various arbitrary mesh elements and determine the cause of visual artifacts. 
+    the relationships between various arbitrary mesh elements and determine the cause of visual artifacts. While the halfedge data structure may be computationally more efficient, it was harder to visualize, and we had to go through many pointers to get to the elemnt we wanted. For example, to get the vertecies associated with an edge we needed to do edge->halfedge->vertex, and edge->halfedge->twin->vertex. Intuitively, it would be logically easier, but computationally more difficult, to do edge->vertex1 and edge->vertex2.
     Especially with the loop subdivision section, it was unclear which part of the implementation was 
     broken and causing the image to become spiky (it ended up being that we iterated through halfedges 
     incorrectly, doing halfedge->vertex->halfedge and expecting it to go back to the original halfedge).
@@ -148,8 +148,8 @@
 </b>
 <p>
     To extend de Casteljau's algorithm to a surface, we first use de Casteljau's algorithm
-    with parameter u to get a set of bezier curves, which are defined by their control points.
-     We then re-run the algorithm on that set of points with parameter v, which gives a point on the 
+    with parameter u to get a set of bezier curves for the surface across u's axis, which are defined by their control points.
+     We then re-run the algorithm on that set of points with parameter v, which is for the other axis, and gives a point on the 
      bezier surface. Since our point is parameterized by both u and v, we know that this point corresponds
      to the point (u, v) on the bezier surface.
 </p>
@@ -207,14 +207,13 @@
   Briefly explain how you implemented the edge flip operation and describe any interesting implementation / debugging tricks you have used.
 </b>
 <p>
-    To implement edge flipping, we first initialized all of the relevant vertices, edges, faces, and halfedges 
-    and labelled them so that we would not lose track of what should go where. We then assigned all 
-    relevant data to their respective mesh elements by following the diagram in the problem. Because we 
+    To implement edge flipping, we navigated the halfedge structure to find all vertices, edges, faces, and halfedges relevant to the edge we are trying to flip.
+    We labelled them so that we would not lose track of what should go where, and as long as these labels are internally consistent, it shouldn't matter which point is labeled what. To actually flip the edge, we only had to reassign the halfedges according to the diagram in the spec, as there were no new edges or vertices involved, and update all the data structure that contained pointers to halfedges.
     reassigned everything, there were no problems caused by forgetting to assign an element to its new 
     states. 
     <br>
     While implementing this feature, there were problems with triangles disappearing and leaving a hole 
-    in the mesh. We used the check_for() function on every element to make sure it was connected to the right 
+    in the mesh. This was caused by not updating all the halfedge pointers in the face and vertex data structure. We used the check_for() function on every element to make sure it was connected to the right 
     number of other elements, and found that certain halfedges pointed to the wrong next halfedge. 
 </p>
 <br>
@@ -249,9 +248,7 @@
   Briefly explain how you implemented the edge split operation and describe any interesting implementation / debugging tricks you have used.
 </b>
 <p>
-    Similarly to edge flips, we first initialize all mesh elements and label them, then constructed 
-    all neccesary new mesh elements (the additional vertex, 2 faces, 3 edges, and their respective 
-    halfedges). We then assigned all elements according to the diagram given in the problem. Because this 
+    Similarly to edge flips, we navigated the halfedge structure to find all vertices, edges, faces, and halfedges relevant to the edge we are trying to split. In the case of an edge split, we actually have 1 additional new vertex, 2 new faces, and 3 new edges. We had to create these new structure, along with their corresponding halfedges. We then assigned all elements according to the diagram given in the problem. Because this 
     problem was similar to the previous problem, we used mostly the same format and only modified a few 
     elements which pointed to the wrong element. The majority of the new work was assigning pointers to 
     the newly constructed elements. 
@@ -315,15 +312,14 @@
 </b>
 <p>
     To implement loop subdivision, we first computed the new positions for all vertices in the original mesh, 
-    where the new position was a sort of weighted average of its adjacent vertices and its original position. 
-    We then calculated the position of any vertices that would be created, using another weighted average 
-    of the vertices around the edge that would be split. We then iterated through every edge in the original 
+    where the new position was a weighted average of its adjacent vertices and its original position, and stored this new position in a seperate variable so that we can still perform calcualtions using the original vetex positions. 
+    We then iterated through all the edges and calculated the position of any vertices that would be created in a split along the edge, using another weighted average 
+    of the vertices around the edge that would be split, and again stored this new poistion in a seperate variable for later use. We then iterated through every edge in the original 
     mesh and split it using the function from part 5. Because this splitting also created new edges that 
     would be added to the list to iterate through, we made sure to mark those edges as new and to not 
     split them further, preventing an infinite loop. After splitting an edge we store the position calculated 
     in the previous step inside the vertex (but not actually updating the position of the vertex yet). We then 
-    flipped any new edge that connected an old and a new vertex. Finally, we updated all vertex positions with 
-    the precomputed and stored values.
+    flipped any new edge that connected an old and a new vertex. At this point after the splitting and flipping, we have a higher reoslution mesh that is not any smoother. After, updating all vertex positions with their precomputed stored positions, the mesh becomes smoother than before. We also had to make sure to flag all edges and verticies as old before the iteration of upsampling, otherwise it would result in unintended splits and flips. 
     <br>
     While debugging, we found that while it didn't seem like which halfedge a newly created vertex pointed to 
     would matter, it did cause our implementation to be off as the adjacent vertex that we thought was 
