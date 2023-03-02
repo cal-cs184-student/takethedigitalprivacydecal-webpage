@@ -321,7 +321,24 @@
   Briefly explain how you implemented the loop subdivision and describe any interesting implementation / debugging tricks you have used.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+    To implement loop subdivision, we first computed the new positions for all vertices in the original mesh, 
+    where the new position was a sort of weighted average of its adjacent vertices and its original position. 
+    We then calculated the position of any vertices that would be created, using another weighted average 
+    of the vertices around the edge that would be split. We then iterated through every edge in the original 
+    mesh and split it using the function from part 5. Because this splitting also created new edges that 
+    would be added to the list to iterate through, we made sure to mark those edges as new and to not 
+    split them further, preventing an infinite loop. After splitting an edge we store the position calculated 
+    in the previous step inside the vertex (but not actually updating the position of the vertex yet). We then 
+    flipped any new edge that connected an old and a new vertex. Finally, we updated all vertex positions with 
+    the precomputed and stored values.
+    <br>
+    While debugging, we found that while it didn't seem like which halfedge a newly created vertex pointed to 
+    would matter, it did cause our implementation to be off as the adjacent vertex that we thought was 
+    close by was actually further away. Additionally, some of the hafledges were originally accessed using 
+    edge->hafledge->vertex->halfedge (which was thought to be equivalent to edge->halfedge), but this resulted 
+    in giving a different halfedge than expected because the halfedge tied to a vertex is basically random. 
+    To debug problems we used the edge inspector and recorded the addresses of specific mesh elements, then 
+    found them again after doing the loop subdivision process and checked if they were the expected values. 
 </p>
 <br>
 
@@ -330,8 +347,52 @@
   Take some notes, as well as some screenshots, of your observations on how meshes behave after loop subdivision. What happens to sharp corners and edges? Can you reduce this effect by pre-splitting some edges?
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+    When we perform loop subdivision on the torus, it becomes more rounded and loses its hexagonal shape. 
 </p>
+<div align="middle">
+  <table style="width:100%">
+    <tr align="center">
+      <td>
+        <img src="images/q6_1.png" align="middle" width="400px"/>
+        <figcaption>Original torus</figcaption>
+      </td>
+      <td>
+        <img src="images/q6_2.png" align="middle" width="400px"/>
+        <figcaption>1 subdivision</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr align="center">
+      <td>
+        <img src="images/q6_3.png" align="middle" width="400px"/>
+        <figcaption>2 subdivisions</figcaption>
+      </td>
+      <td>
+        <img src="images/q6_4.png" align="middle" width="400px"/>
+        <figcaption>3 subdivisions</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<p>
+  However, if we pre-split some edges on one side of the torus, it does not lose its shape on those side:
+</p>
+<div align="middle">
+  <table style="width:100%">
+    <tr align="center">
+      <td>
+        <img src="images/q6_5.png" align="middle" width="400px"/>
+        <figcaption>Torus with extra edge splits</figcaption>
+      </td>
+      <td>
+        <img src="images/q6_6.png" align="middle" width="400px"/>
+        <figcaption>Torus after 3 subdivisions</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
 <br>
 
 
@@ -339,16 +400,49 @@
   Load dae/cube.dae. Perform several iterations of loop subdivision on the cube. Notice that the cube becomes slightly asymmetric after repeated subdivisions. Can you pre-process the cube with edge flips and splits so that the cube subdivides symmetrically? Document these effects and explain why they occur. Also explain how your pre-processing helps alleviate the effects.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+    We see that repeated subdivision of the cube results in an asymmetric shape:
 </p>
+<div align="middle">
+  <table style="width:100%">
+    <tr align="center">
+      <td>
+        <img src="images/q6_7.png" align="middle" width="400px"/>
+        <figcaption>Original cube</figcaption>
+      </td>
+      <td>
+        <img src="images/q6_8.png" align="middle" width="400px"/>
+        <figcaption>Cube after 3 subdivisions</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
 <br>
-
+<p>
+  This is due to the cube originally having an asymmetric set of triangles; each face is initially only split across 1 diagonal. 
+  We can preprocess the cube by splitting each face into 4 triangles, which removes the asymmetry of the diagonal. 
+  We see that this results in a much smoother shape: 
+</p>
+<div align="middle">
+<table style="width:100%">
+  <tr align="center">
+    <td>
+      <img src="images/q6_9.png" align="middle" width="400px"/>
+      <figcaption>Preprocessed cube</figcaption>
+    </td>
+    <td>
+      <img src="images/q6_10.png" align="middle" width="400px"/>
+      <figcaption>Preprocessed cube after 3 subdivisions</figcaption>
+    </td>
+  </tr>
+</table>
+</div>
+<br>
 
 <b>
     If you have implemented any extra credit extensions, explain what you did and document how they work with screenshots.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+    No extra credit options.
 </p>
 <br>
 
@@ -358,7 +452,7 @@
     Save your best polygon mesh as partsevenmodel.dae in your docs folder and show us a screenshot of the mesh in your write-up.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+    N/A
 </p>
 <br>
 
@@ -367,7 +461,7 @@
     Include a series of screenshots showing your original mesh and your mesh after one and two rounds of subdivision. If you have used custom shaders, include screenshots of your mesh with those shaders applied as well.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+    N/A
 </p>
 <br>
 
@@ -376,7 +470,7 @@
     Describe what you have done to enhance your mesh beyond the simple humanoid mesh described in the tutorial.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+    N/A
 </p>
 <br>
 
