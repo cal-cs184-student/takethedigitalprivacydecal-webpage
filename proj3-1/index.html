@@ -208,7 +208,7 @@ Compare the results between uniform hemisphere sampling and lighting sampling in
   Walk through both implementations of the direct lighting function.
 </h3>
 <p>
-    YOUR RESPONSE GOES HERE
+    To calculate direct lighting, we need to account for two things: rays of light that directly hit the camera from the light source in zero-bounce illumination, and rays of light that hit an object and then hit the camera off the object in one-bounce illumination. The ratio of light that bounces off an object is given by the object's BSDF. The irradiance at a given point is the integral over all the light arriving at that point, and we can use Monte-Carlo integration to efficiently estimate this. We have two implementations of direct lighting, hemisphere sampling and importance sampling. Hemisphere sampling takes samples across the hemisphere with equal probability, in practice, this looks like taking m sample rays from the intersection point, determine whether the sample rays intersect a light source, sum the sampled light, and divide by the number of samples to get an estimate for the irrdiance. Importance sampling has greater probability of sampling from a light source, in practice, this looks very similar to hemisphere sampling except the sampled direction is sampled from the light. Importance sampling also allows us to render with point light sources in our scenes.
 </p>
 
 <h3>
@@ -229,23 +229,23 @@ Compare the results between uniform hemisphere sampling and lighting sampling in
     <br>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example1.dae</figcaption>
+        <img src="images/q3-sphere-hemisphere.png" align="middle" width="400px"/>
+        <figcaption>sphere.dae hemisphere sampled</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example1.dae</figcaption>
+        <img src="images/q3-walle-importance.png" align="middle" width="400px"/>
+        <figcaption>walle.dae importance sampled</figcaption>
       </td>
     </tr>
     <br>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example2.dae</figcaption>
+        <img src="images/q3-bunny-hemisphere.png" align="middle" width="400px"/>
+        <figcaption>bunny.dae hemisphere sampled</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example2.dae</figcaption>
+        <img src="images/q3-dragon-importance.png" align="middle" width="400px"/>
+        <figcaption>dragon.dae importance sampled</figcaption>
       </td>
     </tr>
     <br>
@@ -261,28 +261,28 @@ Compare the results between uniform hemisphere sampling and lighting sampling in
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="200px"/>
-        <figcaption>1 Light Ray (example1.dae)</figcaption>
+        <img src="images/q3-bunny-1.png" align="middle" width="200px"/>
+        <figcaption>1 Light Ray (CBbunny.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="200px"/>
-        <figcaption>4 Light Rays (example1.dae)</figcaption>
+        <img src="images/q3-bunny-4.png" align="middle" width="200px"/>
+        <figcaption>4 Light Rays (CBbunny.dae)</figcaption>
       </td>
     </tr>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="200px"/>
-        <figcaption>16 Light Rays (example1.dae)</figcaption>
+        <img src="images/q3-bunny-16.png" align="middle" width="200px"/>
+        <figcaption>16 Light Rays (CBbunny.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="200px"/>
-        <figcaption>64 Light Rays (example1.dae)</figcaption>
+        <img src="images/q3-bunny-64.png" align="middle" width="200px"/>
+        <figcaption>64 Light Rays (CBbunny.dae)</figcaption>
       </td>
     </tr>
   </table>
 </div>
 <p>
-    YOUR EXPLANATION GOES HERE
+    Rendering with fewer light rays per pixel will result in more overall noise in the entire image, but the increased noise much higher around soft shadows with direct lighting becuase the path from that pixel to the area light source is only partially blocked by an object. As such, the phenomenon of soft shadows is much better modeled with global illumination that takes into consideration light bouncing off non light source objects. 
 </p>
 <br>
 
@@ -290,7 +290,7 @@ Compare the results between uniform hemisphere sampling and lighting sampling in
   Compare the results between uniform hemisphere sampling and lighting sampling in a one-paragraph analysis.
 </h3>
 <p>
-    YOUR RESPONSE GOES HERE
+    With the same number of samples, lighting sampling looks less noisy than hemisphere sampling because it is less likely for all the samples to miss the light source, since the pdf we use will favor the lights. Our implementation of lighting sampling does take longer than hemisphere sampling as we take n_samples for every area light source per position and 1 sample for every point light source per position, instead of just n-samples total per position, However if we normalized the n_samples to be the same in both implementations, the compute time to noise ratio will still be better for lighting sampling.
 </p>
 <br>
 
