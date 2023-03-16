@@ -307,7 +307,14 @@ You will probably want to use the instructional machines for the above renders i
   Walk through your implementation of the indirect lighting function.
 </h3>
 <p>
-    YOUR RESPONSE GOES HERE
+    To implement indirect lighting, we expand on our initial direct lighting implementation by recursively adding 
+    the illuminance caused by the resulting ray's bounces. Because a ray could in theory bounce infinitely, adding 
+    progressively smaller amounts of illuminance each time, we set a maximum ray depth which limits the number of 
+    bounces a ray can perform (with having a max ray depth of 0 being equivalent to having only direct lighting). 
+    Additionally, we implement a russian roulette system that immediately terminates a ray with a probability of 0.3. 
+    While this does cut down on the effect of rays that would usually bounce a very large number of times, the 
+    additional effect caused by those rays is expected to be very low anyways, and so it does not affect the result 
+    of the image very much. 
 </p>
 <br>
 
@@ -319,12 +326,12 @@ You will probably want to use the instructional machines for the above renders i
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example1.dae</figcaption>
+        <img src="images/q4-bunny-global.png" align="middle" width="400px"/>
+        <figcaption>CBbunny.dae with global illumination</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example2.dae</figcaption>
+        <img src="images/q4-dragon-global.png" align="middle" width="400px"/>
+        <figcaption>dragon.dae with global illumination</figcaption>
       </td>
     </tr>
   </table>
@@ -339,19 +346,21 @@ You will probably want to use the instructional machines for the above renders i
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>Only direct illumination (example1.dae)</figcaption>
+        <img src="images/q4-bunny-direct.png" align="middle" width="400px"/>
+        <figcaption>Only direct illumination (CBbunny.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>Only indirect illumination (example1.dae)</figcaption>
+        <img src="images/q4-bunny-indirect.png" align="middle" width="400px"/>
+        <figcaption>Only indirect illumination (CBbunny.dae)</figcaption>
       </td>
     </tr>
   </table>
 </div>
 <br>
 <p>
-    YOUR EXPLANATION GOES HERE
+    With only direct illumination, the light source at the top of the box is the only light source, and so the bottom 
+    of the bunny ends up very dark as there is no external lighting. With indirect illumination, even areas such as the 
+    underside of the bunny are slightly lit, and the resulting image is much softer.
 </p>
 <br>
 
@@ -363,27 +372,27 @@ You will probably want to use the instructional machines for the above renders i
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/q4-bunny-0.png" align="middle" width="400px"/>
         <figcaption>max_ray_depth = 0 (CBbunny.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/q4-bunny-max_depth_1.png" align="middle" width="400px"/>
         <figcaption>max_ray_depth = 1 (CBbunny.dae)</figcaption>
       </td>
     </tr>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/q4-bunny-max_depth_2.png" align="middle" width="400px"/>
         <figcaption>max_ray_depth = 2 (CBbunny.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/q4-bunny-max_depth_3.png" align="middle" width="400px"/>
         <figcaption>max_ray_depth = 3 (CBbunny.dae)</figcaption>
       </td>
     </tr>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/q4-bunny-max_depth_100.png" align="middle" width="400px"/>
         <figcaption>max_ray_depth = 100 (CBbunny.dae)</figcaption>
       </td>
     </tr>
@@ -391,7 +400,12 @@ You will probably want to use the instructional machines for the above renders i
 </div>
 <br>
 <p>
-    YOUR EXPLANATION GOES HERE
+    We see that the bunny with max_ray_depth of 0 is equivalent to the bunny with only direct illumination as 
+    shown above. When increasing the depth to 1, we immediately get the effects of having indirect lighting, 
+    which causes the bunny to be lit even on its underside. However, further increases of max_depth do not have 
+    very pronounced effect, as they are only increasing fractional amounts of illuminance with each additional 
+    bounce. With the depth 100 bunny, the light has converged long before 100 bounces (or been terminated by 
+    russian roulette), and so it looks almost identical to the depth 3 bunny. 
 </p>
 <br>
 
@@ -403,45 +417,47 @@ You will probably want to use the instructional machines for the above renders i
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>1 sample per pixel (example1.dae)</figcaption>
+        <img src="images/q4-spheres-1.png" align="middle" width="400px"/>
+        <figcaption>1 sample per pixel (CBspheres_lambertian.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>2 samples per pixel (example1.dae)</figcaption>
-      </td>
-    </tr>
-    <tr align="center">
-      <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>4 samples per pixel (example1.dae)</figcaption>
-      </td>
-      <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>8 samples per pixel (example1.dae)</figcaption>
+        <img src="images/q4-spheres-2.png" align="middle" width="400px"/>
+        <figcaption>2 samples per pixel (CBspheres_lambertian.dae)</figcaption>
       </td>
     </tr>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>16 samples per pixel (example1.dae)</figcaption>
+        <img src="images/q4-spheres-4.png" align="middle" width="400px"/>
+        <figcaption>4 samples per pixel (CBspheres_lambertian.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>64 samples per pixel (example1.dae)</figcaption>
+        <img src="images/q4-spheres-8.png" align="middle" width="400px"/>
+        <figcaption>8 samples per pixel (CBspheres_lambertian.dae)</figcaption>
       </td>
     </tr>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>1024 samples per pixel (example1.dae)</figcaption>
+        <img src="images/q4-spheres-16.png" align="middle" width="400px"/>
+        <figcaption>16 samples per pixel (CBspheres_lambertian.dae)</figcaption>
+      </td>
+      <td>
+        <img src="images/q4-spheres-64.png" align="middle" width="400px"/>
+        <figcaption>64 samples per pixel (CBspheres_lambertian.dae)</figcaption>
+      </td>
+    </tr>
+    <tr align="center">
+      <td>
+        <img src="images/q4-spheres-1024.png" align="middle" width="400px"/>
+        <figcaption>1024 samples per pixel (CBspheres_lambertian.dae)</figcaption>
       </td>
     </tr>
   </table>
 </div>
 <br>
 <p>
-    YOUR EXPLANATION GOES HERE
+    Here we compare various images of spheres constructed with various sample-per-pixel rates, each with 
+    4 light rays and a max bounce depth of 5. We see that increasing the number of camera rays per pixel 
+    results in much better quality, but it also comes at a high computational cost. 
 </p>
 <br>
 
@@ -454,7 +470,13 @@ Pick one scene and render it with at least 2048 samples per pixel. Show a good s
   Explain adaptive sampling. Walk through your implementation of the adaptive sampling.
 </h3>
 <p>
-    YOUR RESPONSE GOES HERE
+    Adaptive sampling essentially consists of ending certain samples early when their illumination level converges 
+    to a specified tolerance level (which we define to be 1.96 * standard deviation/sqrt(number of samples)), so that 
+    we do not have to spend extra computational power on sampling lights that seem to be unchanging. Initially, our 
+    raytrace_pixel function ran some number of samples n for each pixel, but with adaptive sampling, we keep a running 
+    sum of illuminance for the generated samples, and if it reaches the convergence point we end the sampling early. In 
+    the images below, we see that the red areas represent areas where there were many camera samples (the illuminance 
+    did not converge quickly) and the dark blue areas represent areas where the samples converged quickly. 
 </p>
 <br>
 
@@ -466,22 +488,22 @@ Pick one scene and render it with at least 2048 samples per pixel. Show a good s
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>Rendered image (example1.dae)</figcaption>
+        <img src="images/q5-bunny.png" align="middle" width="400px"/>
+        <figcaption>Rendered image (CBbunny.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>Sample rate image (example1.dae)</figcaption>
+        <img src="images/q5-bunny_rate.png" align="middle" width="400px"/>
+        <figcaption>Sample rate image (CBbunny.dae)</figcaption>
       </td>
     </tr>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>Rendered image (example2.dae)</figcaption>
+        <img src="images/q5-CBspheres_lambertian.png" align="middle" width="400px"/>
+        <figcaption>Rendered image (CBspheres_lambertian.dae)</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>Sample rate image (example2.dae)</figcaption>
+        <img src="images/q5-CBspheres_lambertian_rate.png" align="middle" width="400px"/>
+        <figcaption>Sample rate image (CBspheres_lambertian.dae)</figcaption>
       </td>
     </tr>
   </table>
