@@ -48,7 +48,7 @@
 
 <br><br>
 
-<!--
+
 <div align="center">
   <table style="width=100%">
       <tr>
@@ -81,8 +81,6 @@ Do <em>NOT</em> use absolute paths, such as <pre>"/Users/student/Desktop/image.j
 <p>or, alternatively, you can include an SVG image of a LaTex formula.</p>
 
 <div>
-	
--->
 
 <h2 align="middle">Overview</h2>
 <p>
@@ -151,7 +149,8 @@ Compare rendering times on a few scenes with moderately complex geometries with 
   Walk through your BVH construction algorithm. Explain the heuristic you chose for picking the splitting point.
 </h3>
 <p>
-    We construct the BVH by recursively calling the BVH construction function on the left and right halves of the node until the termination condition of reaching less than max_leaf_size objects within each leaf node. We picked the plane in which the bounding box spans the greatest length in to be the plane that we split on, and we used the centroid of the bounding box as the splitting point. We thought this made sense as splitting along the plane of greatest length will generally lead to the easiest distribution of objects in left and right halves. To split the list of objects, at each step in the recursion, we sort the objects based their position on the split plane, then iterate through it until we reach the centroid condition.
+    To construct a BVH, we recurisvely pick a splitting point and divide into further BVH nodes until the number of primitive objects is less than or equal to max_lef_size.
+	To pick a splitting point, we first need to pick an axis to split on. We do this by taking the span of the bounding box in the x, y, and z, dimensions and picking the axis that the bounding box is largest in. Then we compute the point along that axis that we will split on by taking the geometric center (centroid) of the bounding box. There are likely more complex heuristics, but this one is simple are results is an efficient enough bvh for our needs.
 </p>
 
 <h3>
@@ -162,22 +161,12 @@ Compare rendering times on a few scenes with moderately complex geometries with 
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example1.dae</figcaption>
+        <img src="images/2-1_cbdragon.png" align="middle" width="400px"/>
+        <figcaption>cbdragon.dae</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example2.dae</figcaption>
-      </td>
-    </tr>
-    <tr align="center">
-      <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example3.dae</figcaption>
-      </td>
-      <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example4.dae</figcaption>
+        <img src="images/2-1_cblucy.png" align="middle" width="400px"/>
+        <figcaption>cblucy.dae</figcaption>
       </td>
     </tr>
   </table>
@@ -188,9 +177,26 @@ Compare rendering times on a few scenes with moderately complex geometries with 
   Compare rendering times on a few scenes with moderately complex geometries with and without BVH acceleration. Present your results in a one-paragraph analysis.
 </h3>
 <p>
-    YOUR RESPONSE GOES HERE
+    We compared rendering times for cow.dae and for maxplanck.dae. Cow.dae originally took 17.6 seconds to render, requiring an average of 949.0 intersection tests per ray. With BVH acceleration, the cow took 0.13 seconds to render, and required an average of 0.83 intersection tests per ray. We noticed that BVH acceleration caused the BVH building process to take slighly longer, with 0.0001 seconds for the non-BVH version and 0.0102 seconds for the BVH version. This slighly longer construction time is however greatly faster than the difference in render times. Rendering maxplanck.dae told a similar story, with the non-BVH version taking 157.54 seconds to render and the BVH version taking 0.2402 seconds, as seen in the screenshots below. This makes sense as without BVH we had to check each ray against all primitives in the scene, but we now only check each ray against primitivies in leaf BVHNodes that the ray intersects, as well as the relevant non-leaf BVHNodes required to traverse the tree.
 </p>
+<div align="middle">
+	<table style="width:100%">
+	  <tr align="center">
+		<td>
+		  <img src="images/2-1_rendertime_pre_bvh_maxplanck.png" align="middle" width="400px"/>
+		  <figcaption>Render time for maxplanck.dae without BVH.</figcaption>
+		</td>
+		<td>
+		  <img src="images/2-1_rendertime_post_bvh_maxplanck.png" align="middle" width="400px"/>
+		  <figcaption>Render time for maxplanck.dae with BVH.</figcaption>
+		</td>
+	  </tr>
+	</table>
+  </div>
+  <br>
 <br>
+
+
 
 <h2 align="middle">Part 3: Direct Illumination (20 Points)</h2>
 <!-- Walk through both implementations of the direct lighting function.
