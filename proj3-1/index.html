@@ -114,7 +114,12 @@ Show images with normal shading for a few small .dae files. -->
   Explain the triangle intersection algorithm you implemented in your own words.
 </h3>
 <p>
-    One way to test for triangle intersection is to test for a a plane intersection, then test if the point of intersection on that plane is within the triangle. In our implementation, we used an optimiztion called the Moller Trumbone algorithm.
+    One way to test for triangle intersection is to test for a a plane intersection, then test if the point of intersection on that plane is within the triangle. 
+    In our implementation, we used an optimiztion called the Moller-Trumbore algorithm, which essentially reduces the number of 
+    computations necessary by calculating the intersections in terms of barycentric coordinates instead of world coordinates. 
+    Additionally, it creates a system of linear equations that can be solved by converting it into a matrix and using Cramer's rule. 
+    This efficiently gives us both whether the ray intersected the triangle or not, as well as the barycentric coordinates that can 
+    be used to calculate surface normals. 
 </p>
 <br>
 
