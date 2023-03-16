@@ -41,14 +41,14 @@
 
 <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
 <h1 align="middle">Project 3-1: Path Tracer</h1>
-<h2 align="middle">YOUR NAME(S)</h2>
+<h2 align="middle">Charlie Chen, Maxwell Lo</h2>
 
 <!-- Add Website URL -->
-<h2 align="middle">Website URL: <a href="TODO">TODO</a></h2>
+<h2 align="middle">Website URL: <a href=https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj3/index.html">https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj3/index.html</a></h2>
 
 <br><br>
 
-
+<!--
 <div align="center">
   <table style="width=100%">
       <tr>
@@ -81,10 +81,19 @@ Do <em>NOT</em> use absolute paths, such as <pre>"/Users/student/Desktop/image.j
 <p>or, alternatively, you can include an SVG image of a LaTex formula.</p>
 
 <div>
+-->
 
 <h2 align="middle">Overview</h2>
 <p>
-    YOUR RESPONSE GOES HERE
+    In this project, we implemented a path tracing model that allowed us to render complicated images, complete with 
+    light sources and global illumination. This allows us to generate realistic images with shadows and varying 
+    levels of brightness. By using a geometric representation of an object in the form of a mesh, we can cast rays 
+    through each pixel in the image and take their resulting emissions to get the color associated with each pixel. 
+    By having the rays "bounce" around the image (which is actually just casting a new ray from the point where it 
+    intersected the object), we can collect indirect lighting samples and use that to generate a more complete image. 
+    Overall, the results of this project were very cool to see and it was fun to watch as the images went from nothing 
+    to a bunch of sporadic colors to photorealistic images with shadows. However, it also became clear that having high 
+    quality images takes a very long time to simulate/compute the resultant lighting. 
 </p>
 <br>
 
