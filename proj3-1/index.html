@@ -106,7 +106,7 @@ Show images with normal shading for a few small .dae files. -->
   Walk through the ray generation and primitive intersection parts of the rendering pipeline.
 </h3>
 <p>
-    YOUR RESPONSE GOES HERE
+    The first step of rendering is ray generation; to generate a ray, we are given the 2D image coordinates that we want a ray for, and we transform these coordinates into 3D camera space by placing the sensor plane where the image is at to be the the plnae z=-1, and then create a new ray originating from the cameras position and directed at the calculated 3D position. With these generated rays, we then use test for primitive intersectons to determine what should get rendered in the scene for camera rays, and what gets lit in the scene for lighting rays.
 </p>
 <br>
 
@@ -114,7 +114,7 @@ Show images with normal shading for a few small .dae files. -->
   Explain the triangle intersection algorithm you implemented in your own words.
 </h3>
 <p>
-    YOUR RESPONSE GOES HERE
+    One way to test for triangle intersection is to test for a a plane intersection, then test if the point of intersection on that plane is within the triangle. In our implementation, we used an optimiztion called the Moller Trumbone algorithm.
 </p>
 <br>
 
@@ -126,22 +126,22 @@ Show images with normal shading for a few small .dae files. -->
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example1.dae</figcaption>
+        <img src="images/q1-bunny.png" align="middle" width="400px"/>
+        <figcaption>bunny.dae</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example2.dae</figcaption>
+        <img src="images/q1-coil.png" align="middle" width="400px"/>
+        <figcaption>coil.dae</figcaption>
       </td>
     </tr>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example3.dae</figcaption>
+        <img src="images/q1-spheres.png" align="middle" width="400px"/>
+        <figcaption>spheres.dae</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
-        <figcaption>example4.dae</figcaption>
+        <img src="images/q1-gems.png" align="middle" width="400px"/>
+        <figcaption>gems.dae</figcaption>
       </td>
     </tr>
   </table>
