@@ -1,7 +1,150 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Project 3-2 here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+  </style> 
+<title>Your Name  |  CS 184</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle">Assignment 3-2: Additional Features to PathTracer</h1>
+    <h2 align="middle">Charles Chen, Maxwell Lo</h2>
+	<h2 align="middle">Website URL: <a href="https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj3-2/index.html">https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj3-2/index.html</a></h2>
+
+    <div class="padded">
+
+        
+        * NOTE: For this project, you will choose TWO out of the four given parts to complete. One of those parts must be Part 1 or Part 2. In other words, you can choose any combination of two parts except the pair (Part 3, Part 4).
+
+		<p><b>Overview</b></p>
+		<p>
+			In this project we implemented a few features to upgrade our existing raytracer (Project 3-1). We chose to add 
+			reflective and refractive materials (part 1), and depth of field (part 4). This allowed us to generate 
+			even more realistic looking images and in a variety of formats compared to the original raytracer. 
+		</p>
+
+
+        <h3 align="middle">Part 1. Mirror and Glass Materials</h3>
+
+        <p><b>
+            Show a sequence of six images of scene `CBspheres.dae` rendered with `max_ray_depth` set to 0, 1, 2, 3, 4, 5, and 100. The other settings should be at least 64 samples per pixel and 4 samples per light. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        <p><b>
+            Point out the new multibounce effects that appear in each image. 
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        <p><b>
+            Explain how these bounce numbers relate to the particular effects that appear. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+
+        <h3 align="middle">Part 4. Depth of Field</h3>
+        <b>
+            For these subparts, we recommend using a microfacet BSDF scene to show off the cool out of focus effects you can get with depth of field!
+        </b>
+        <p><b>
+            In a few sentences, explain the differences between a pinhole camera model and a thin-lens camera model. 
+        </b></p>
+        <p>
+            In this section we implemented a thin-lens camera model to render the depth of field effect. 
+			In the original ideal pinhole camera model, everything is treated as in focus. When we switch to a 
+			thin-lens camera model, objects are only in focus if they are at a specific distance (the focal distance) 
+			away from the lens. This causes certain areas of the scene to be in focus, and other areas to be blurry. 
+			<br>
+			To do this, we randomly sample a point on the thin lens (which has some area defined by the lens radius) 
+			and calculate where it will intersect with the plane of focus. Because of the property that rays from the 
+			same point on the plane of focus always focus to the same point on the image plane, we can just use the 
+			pinhole camera model's intersection with the plane of focus as the intersection for the sampled point as well. 
+
+        </p>
+        <br>
+        <p><b>
+            Show a "focus stack" where you focus at 4 visibly different depths through a scene. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            Here we have different depths in focus (depending on focal distance). We see that as focal distance 
+			increases, a further back section of the dragon comes into focus. 
+        </p>
+        <br>
+		<div align="middle">
+			<table style="width:100%">
+			  <tr align="center">
+				<td>
+				  <img src="images/q4_dragon_0.23_4.25.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.23, Focal Distance = 4.25 (dragon.dae)</figcaption>
+				</td>
+				<td>
+				  <img src="images/q4_dragon_0.23_4.5.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.23, Focal Distance = 4.5 (dragon.dae)</figcaption>
+				</td>
+			  </tr>
+			  <tr align="center">
+				<td>
+				  <img src="images/q4_dragon_0.23_4.75.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.23, Focal Distance = 4.75 (dragon.dae)</figcaption>
+				</td>
+				<td>
+				  <img src="images/q4_dragon_0.23_5.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.23, Focal Distance = 5 (dragon.dae)</figcaption>
+				</td>
+			  </tr>
+			</table>
+		  </div>
+
+        <br>
+        <p><b>
+            Show a sequence of 4 pictures with visibly different aperture sizes, all focused at the same point in a scene. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            Here we have different aperture sizes (depending on lens radius). We see that as aperture increases, 
+			the area of the dragon that is in focus decreases (though the front belly of the dragon is always 
+			in focus).
+        </p>
+        <br>
+		<div align="middle">
+			<table style="width:100%">
+			  <tr align="center">
+				<td>
+				  <img src="images/q4_dragon_0.05_4.5.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.05, Focal Distance = 4.5 (dragon.dae)</figcaption>
+				</td>
+				<td>
+				  <img src="images/q4_dragon_0.1_4.5.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.1, Focal Distance = 4.5 (dragon.dae)</figcaption>
+				</td>
+			  </tr>
+			  <tr align="center">
+				<td>
+				  <img src="images/q4_dragon_0.2_4.5.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.2, Focal Distance = 4.5 (dragon.dae)</figcaption>
+				</td>
+				<td>
+				  <img src="images/q4_dragon_0.3_4.5.png" align="middle" width="400px"/>
+				  <figcaption>Aperture = 0.3, Focal Distance = 4.5 (dragon.dae)</figcaption>
+				</td>
+			  </tr>
+			</table>
+		  </div>
+
+    </div>
+</body>
 </html>
+
