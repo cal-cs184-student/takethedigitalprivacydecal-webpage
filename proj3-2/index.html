@@ -1,22 +1,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<style>  
-    div.padded {  
-      padding-top: 0px;  
-      padding-right: 100px;  
-      padding-bottom: 0.25in;  
-      padding-left: 100px;  
-    }  
-  </style> 
-<title>Your Name  |  CS 184</title>
+<style>
+	body {
+	  background-color: white;
+	  padding: 100px;
+	  width: 1000px;
+	  margin: auto;
+	  text-align: left;
+	  font-family: 'Open Sans', sans-serif;
+	  color: #121212;
+	}
+	h1, h2, h3, h4 {
+	  font-family: 'Source Sans Pro', sans-serif;
+	}
+	kbd {
+	  color: #121212;
+	}
+  </style>
+<title>CS 184 Path Tracer</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 </head>
 <body>
 <br />
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
 <h1 align="middle">Assignment 3-2: Additional Features to PathTracer</h1>
-    <h2 align="middle">Charles Chen, Maxwell Lo</h2>
+    <h2 align="middle">Charlie Chen, Maxwell Lo</h2>
 	<h2 align="middle">Website URL: <a href="https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj3-2/index.html">https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj3-2/index.html</a></h2>
 
     <div class="padded">
@@ -24,11 +35,11 @@
         
         * NOTE: For this project, you will choose TWO out of the four given parts to complete. One of those parts must be Part 1 or Part 2. In other words, you can choose any combination of two parts except the pair (Part 3, Part 4).
 
-		<p><b>Overview</b></p>
+		<h3 align="middle">Overview</h3>
 		<p>
 			In this project we implemented a few features to upgrade our existing raytracer (Project 3-1). We chose to add 
 			reflective and refractive materials (part 1), and depth of field (part 4). This allowed us to generate 
-			even more realistic looking images and in a variety of formats compared to the original raytracer. 
+			even more realistic looking images by simulating different camera lenses and different materials, and in a greater variety of formats compared to the original raytracer. 
 		</p>
 
 
@@ -38,21 +49,60 @@
             Show a sequence of six images of scene `CBspheres.dae` rendered with `max_ray_depth` set to 0, 1, 2, 3, 4, 5, and 100. The other settings should be at least 64 samples per pixel and 4 samples per light. Make sure to include all screenshots.
         </b></p>
         <p>
-            Your response goes here.
+            <div align="middle">
+				<table style="width:100%">
+				  <tr align="center">
+					<td>
+					  <img src="images/1-0bounce" align="middle" width="400px"/>
+					  <figcaption>-s 256, -l 4, -m 0, CBSpheres.dae</figcaption>
+					</td>
+					<td>
+					  <img src="images/1-1bounce" align="middle" width="400px"/>
+					  <figcaption>-s 256, -l 4, -m 1, CBSpheres.dae</figcaption>
+					</td>
+				  </tr>
+				  <tr align="center">
+					<td>
+					  <img src="images/1-2bounce" align="middle" width="400px"/>
+					  <figcaption>-s 256, -l 4, -m 2, CBSpheres.dae</figcaption>
+					</td>
+					<td>
+					  <img src="images/1-3bounce" align="middle" width="400px"/>
+					  <figcaption>-s 256, -l 4, -m 3, CBSpheres.dae</figcaption>
+					</td>
+				  </tr>
+				  <tr align="center">
+					<td>
+					  <img src="images/1-4bounce" align="middle" width="400px"/>
+					  <figcaption>-s 256, -l 4, -m 4, CBSpheres.dae</figcaption>
+					</td>
+					<td>
+					  <img src="images/1-5bounce" align="middle" width="400px"/>
+					  <figcaption>-s 256, -l 4, -m 5, CBSpheres.dae</figcaption>
+					</td>
+				  </tr>
+				  <tr align="center">
+					<td>
+					  <img src="images/1-100bounce" align="middle" width="400px"/>
+					  <figcaption>-s 256, -l 4, -m 100, CBSpheres.dae</figcaption>
+					</td>
+				  </tr>
+				</table>
+			  </div>
         </p>
         <br>
         <p><b>
             Point out the new multibounce effects that appear in each image. 
         </b></p>
         <p>
-            Your response goes here.
+            When we make the max ray depth 0, we can only see the square light source on the ceiling, and everything else is completely dark. At 1 max ray depth, the we can see the room and the spheres now, but both spheres have a glossy, black, specular reflective look to them instead of the mirror and glass material they are supposed to have. The rest of the ceiling is still completely dark. At 2 max ray depth, we can now see the mirror surface for the ball on the left, but the glass ball on the right is still black. The rest of the ceiling is lit up now, but the reflected ceiling is still black in the mirror ball. At 3 max ray depth, the glass ball is now visibly made of glass and there is a bright spot under the glass ball, but the reflected glass ball in the mirror is still black. The reflected ceiling in the mirror ball is now lit up. At 4 max ray depth, the reflected glass ball in the mirror ball now shows up, and there is an extra bright spot on the wall next to the glass ball. At 5 max ray depth, everything looks the same, just a little brighter. At 100 max ray depth, everything looks the same, just a lot brighter.
         </p>
         <br>
         <p><b>
             Explain how these bounce numbers relate to the particular effects that appear. Make sure to include all screenshots.
         </b></p>
         <p>
-            Your response goes here.
+            At 0 bounces, nothing but the light source is visible because only things that directly emit light will have rays that reach the camera without bouncing. At 1 max ray depth, the room and the reflectance on the surface of the spheres is visbile, because rays of light only require 1 bounce from the light source off the object surface into the camera. At 2 max ray depth, rays can now bounce off objects onto the ceiling then onto the camera, making the ceiling lit up. The mirror surface of the ball shows up because rays of light take 1 bounce off the other object, then 1 more bounce off the mirror ball onto the camera in light source -> object -> mirror. The edges of the glass ball are visible, because those rays only intersect the glass at one point, making 2 bounces enough for light source -> object -> touch glass. At 3 max ray depth, the glass spheres is correctly rendered as the rays go light source -> object -> enter glass - > exit glass, and the reflected ceiling shows up in the mirror ball light source -> object -> ceiling -> mirror. At 4 max ray depth the spot on the right side of the wall shows up as total internel reflection occurs. At 5 max ray depth, everything looks the same but brighter, as light bounces 1 more time. At 100 max ray depth, everything looks the same, but even brighter, as light bounces 95 more times. Even though each bounce of the ray carries less light with it, it still adds up. This is an imperfection in the way we model the rays.
         </p>
         <br>
 
