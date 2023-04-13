@@ -62,18 +62,30 @@
 
   <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
   <h1 align="middle">Project 4: Cloth Simulator</h1>
-  <h2 align="middle">TODO: student names, CS184-???</h2>
-
-  <br><br>
+  <h2 align="middle">Charlie Chen & Maxwell Lo, CS184-egg-custard-tart</h2>
+  <h2 align="middle">Website URL: <a href="https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj4/index.html">https://cal-cs184-student.github.io/takethedigitalprivacydecal-webpage/proj4/index.html</a></h2>
 
   <div>
     <h2 align="middle">Overview</h2>
-    <p>Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.</p>
+    <p>
+		In this project we implemented a cloth simulator, which represents a cloth using a series of point 
+		masses and springs, and is affected by forces such as gravity, springs, or collision with other objects
+		(or the cloth itself). 
+		We also implemented various types of shaders that can be used to display the cloth with different images, 
+		colors, and lighting effects. 
+	</p>
   </div>
 
   <a href="https://cs184.eecs.berkeley.edu/sp23/docs/proj4-part-1">
   <h2 align="middle">Part 1: Masses and springs</h2>
   </a>
+  	<p>
+		In this section we implemented a grid of point masses with springs attaching them. 
+		The point masses were stored in a 1d vector in row-major order. For a horizontally placed cloth, 
+		we distributed the point masses uniformly across the xz plane (with a constant y), and for 
+		a vertical cloth, we distributed across the xy plane with a z coordinate chosen to be a small 
+		random offset. We then attached structural, shearing, and bending springs to each point mass. 
+	</p>
     <blockquote><b>
       Take some screenshots of <i>scene/pinned2.json</i> from a viewing angle where you can clearly see the cloth wireframe 
       to show the structure of your point masses and springs. 
@@ -83,14 +95,13 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t1-zoomed-in_p2.png" align="middle" width="300vw" />
+            <img src="images/q1-zoom_in.png" align="middle" width="300vw" />
           </td>
           <td>
-            <img src="images/t1-init_p2.png" align="middle" width="300vw" />
-            <figcaption>Initial configuration ($\text{ks} = 5,000$)</figcaption>
+            <img src="images/q1-default.png" align="middle" width="300vw" />
           </td>
           <td>
-            <img src="images/t1-zoomed-out_p2.png" align="middle" width="300vw" />
+            <img src="images/q1-zoom_out.png" align="middle" width="300vw" />
           </td>
           <td>
         </tr>
@@ -107,19 +118,19 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t1-no_shear.png" align="middle" width="500px" />
+            <img src="images/q1-no_shear.png" align="middle" width="500px" />
             <figcaption>No shearing constraints</figcaption>
           </td>
         </tr>
         <tr align="center">
           <td>
-            <img src="images/t1-only_shear.png" align="middle" width="500px" />
+            <img src="images/q1-only_shear.png" align="middle" width="500px" />
             <figcaption>Only shearing constraints</figcaption>
           </td>
         </tr>
         <tr align="center">
           <td>
-            <img src="images/t1-all.png" align="middle" width="500px" />
+            <img src="images/q1-all.png" align="middle" width="500px" />
             <figcaption>All constraints</figcaption>
           </td>
         </tr>
@@ -131,6 +142,14 @@
   <a href="https://cs184.eecs.berkeley.edu/sp23/docs/proj4-part-2">
   <h2 align="middle">Part 2: Simulation via numerical integration</h2>
   </a>
+  <p>
+	In this section we implemented a cloth simulation that is affected by gravity and the spring forces 
+	between point masses. In order to do this, we calculated the forces that would be applied to each mass 
+	(as a result of gravity and spring forces) and applied them according to Verlet Integration, which 
+	helps find the expected next position of the point mass. We also applied a small damping factor to 
+	the simulation. Finally, we constrained the point masses to not move too far away from their adjacent 
+	points by fixing the length of the spring to be at most 1.1 * the rest length. 
+  </p>
     <blockquote><b>
       Experiment with some the parameters in the simulation. 
       To do so, pause the simulation at the start with <kbd>P</kbd>, modify the values of interest, and then resume by pressing <kbd>P</kbd> again. 
@@ -143,8 +162,26 @@
     </b></blockquote>
 
     <p>
-      TODO
+      When we change the spring constant to a low value, the cloth ends up with many wrinkles when at rest. 
+	  When we use a large spring constant, the cloth seems very stiff and does not bend easily, with only 
+	  one fold. 
     </p>
+
+	<div align="middle">
+		<table style="width:100%">
+		  <tr align="center">
+			<td>
+			  <img src="images/q2-ks-50.png" align="middle" width="400vw" />
+			  <figcaption>Small Spring Constant (ks = 50)</figcaption>
+			</td>
+			<td>
+			  <img src="images/q2-ks-100000.png" align="middle" width="400vw" />
+			  <figcaption>Large Spring Constant (ks = 100000)</figcaption>
+			</td>
+			<td>
+		  </tr>
+		</table>
+	  </div>
 
 
     <blockquote><b>
@@ -154,8 +191,26 @@
     </b></blockquote>
 
     <p>
-      TODO
-    </p>
+		When we change the density to be a low value, the cloth is very light, and is not affected by 
+		gravity as much. The final resting position's fold is not very deep, as the cloth does not 
+		get pulled down as far. When we use a high density, the fold at the top becomes very deep.
+	  </p>
+  
+	  <div align="middle">
+		  <table style="width:100%">
+			<tr align="center">
+			  <td>
+				<img src="images/q2-density-1.png" align="middle" width="400vw" />
+				<figcaption>Low density (p = 1)</figcaption>
+			  </td>
+			  <td>
+				<img src="images/q2-density-1000.png" align="middle" width="400vw" />
+				<figcaption>High density (p = 1000)</figcaption>
+			  </td>
+			  <td>
+			</tr>
+		  </table>
+		</div>
     
     
     <blockquote><b>
@@ -165,37 +220,26 @@
     </b></blockquote>
 
     <p>
-      TODO
-    </p>
-
-
-    <blockquote><b>
-      <small>
-      For each of the above, observe any noticeable differences in the cloth compared to the default parameters 
-      and show us some screenshots of those interesting differences and describe when they occur.
-      </small>
-    </b></blockquote>
+		When we change the damping factor to a low value, the cloth takes a very long time to come 
+		to rest, and bounces much more after swinging downward. When we change the damping factor to a 
+		high value, the cloth falls slowly and does not move once it hits the bottom of its swing. 
+	  </p>
   
-    <div align="middle">
-      <table style="width:100%">
-        <tr align="center">
-          <td>
-            <img src="images/t2-interesting-difference1.png" align="middle" width="400vw" />
-            <figcaption>Default Parameters</figcaption>
-          </td>
-          <td>
-            <img src="images/t2-interesting-difference2.png" align="middle" width="400vw" />
-            <figcaption>Default Parameters</figcaption>
-          </td>
-          <td>
-        </tr>
-      </table>
-    </div>
-  
-    <p>
-      TODO
-    </p>
-
+	  <div align="middle">
+		  <table style="width:100%">
+			<tr align="center">
+			  <td>
+				<img src="images/q2-damping-0.05.png" align="middle" width="400vw" />
+				<figcaption>Low damping factor (0.05)</figcaption>
+			  </td>
+			  <td>
+				<img src="images/q2-damping-0.8.png" align="middle" width="400vw" />
+				<figcaption>High damping factor (0.8)</figcaption>
+			  </td>
+			  <td>
+			</tr>
+		  </table>
+		</div>
 
     <blockquote><b>
     Show us a screenshot of your shaded cloth from <i>scene/pinned4.json</i> in its final resting state! 
@@ -203,7 +247,7 @@
     </b></blockquote>
 
     <div align="middle">
-      <img src="images/t2-shaded-cloth-resting-p4.png" align="middle" width="100%" />
+      <img src="images/q2-pinned_4.png" align="middle" width="100%" />
     </div>
 
 
@@ -211,6 +255,18 @@
   <a href="https://cs184.eecs.berkeley.edu/sp23/docs/proj4-part-3">
   <h2 align="middle">Part 3: Handling collisions with other objects</h2>
   </a>
+  	<p>
+		In this section we implemented collision with spherical and plane objects. To do so, at every 
+		simulation timestep, we check for potential collisions between every object and every point mass 
+		in the cloth. To implement sphere collision, we check if the point mass is inside the sphere, 
+		and if it is, we push it to the closest point on the surface of the sphere (plus a slight offset 
+		so that the cloth is not directly on the sphere). This causes the falling cloth to rest on top 
+		of the sphere. To implement plane collision, we check if the previous position and the new 
+		position of the point mass are on opposite sides of the plane - if they are, that means the cloth 
+		has travelled through the plane. We then push the point mass back to the surface of the plane, with a 
+		slight offset towards the side that it came from, so that it is resting on top (opposite of whichever 
+		direction gravity was) of the plane.
+	</p>
     <blockquote><b>
       Show us screenshots of your shaded cloth from <i>scene/sphere.json</i> in its final resting state 
       on the sphere using the default <code>ks = 5000</code> as well as with <code>ks = 500</code> and <code>ks = 50000</code>. 
@@ -220,15 +276,15 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t3-ks-500.png" align="middle" width="300vw" />
+            <img src="images/q3-ks-500.png" align="middle" width="300vw" />
             <figcaption>$\text{ks} = 500$</figcaption>
           </td>
           <td>
-            <img src="images/t3-ks-5000.png" align="middle" width="300vw" />
+            <img src="images/q3-ks-5000.png" align="middle" width="300vw" />
             <figcaption>Initial configuration ($\text{ks} = 5,000$)</figcaption>
           </td>
           <td>
-            <img src="images/t3-ks-50000.png" align="middle" width="300vw" />
+            <img src="images/q3-ks-50000.png" align="middle" width="300vw" />
             <figcaption>$\text{ks} = 50,000$</figcaption>
           </td>
           <td>
@@ -242,7 +298,9 @@
     </b></blockquote>
 
     <p>
-      TODO
+		We see that as the spring constant gets smaller, the cloth becomes more fluid and 
+		wraps around the sphere more tightly. As the spring constant gets larger, the cloth becomes 
+		more rigid and ends up sticking outwards more, resulting in fewer but larger folds. 
     </p>
 
 
@@ -253,7 +311,7 @@
     </b></blockquote>
 
     <div align="middle">
-      <img src="images/t3-shaded-cloth-at-rest.png" align="middle" width="100%" />
+      <img src="images/q3-plane.png" align="middle" width="100%" />
     </div>
 
 
