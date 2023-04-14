@@ -330,15 +330,15 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t4-collision-1.png" align="middle" width="300vw" />
+            <img src="images/q4-collision1.png" align="middle" width="300vw" />
             <figcaption>Self collision 1</figcaption>
           </td>
           <td>
-            <img src="images/t4-collision-2.png" align="middle" width="300vw" />
+            <img src="images/q4-collision2.png" align="middle" width="300vw" />
             <figcaption>Self collision 2</figcaption>
           </td>
           <td>
-            <img src="images/t4-collision-3.png" align="middle" width="300vw" />
+            <img src="images/q4-collision3.png" align="middle" width="300vw" />
             <figcaption>Self collision 3</figcaption>
           </td>
           <td>
@@ -357,22 +357,22 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-              <img src="images/t4-density-1.png" align="middle" width="400px" />
+              <img src="images/q4-density-1.png" align="middle" width="400px" />
               <figcaption>$\text{density} = 1$</figcaption>
               
           </td>
           <td>
-              <img src="images/t4-density-2.png" align="middle" width="400px" />
+              <img src="images/q4-density-50.png" align="middle" width="400px" />
               <figcaption>$\text{density} = 50$</figcaption>
           </td>
         </tr>
         <tr align="center">
           <td>
-              <img src="images/t4-ks-1.png" align="middle" width="400px" />
+              <img src="images/q4-ks-1000.png" align="middle" width="400px" />
               <figcaption>$\text{ks} = 1,000$</figcaption>
           </td>
           <td>
-              <img src="images/t4-ks-2.png" align="middle" width="400px" />
+              <img src="images/q4-ks-7500.png" align="middle" width="400px" />
               <figcaption>$\text{ks} = 7,500$</figcaption>
           </td>
         </tr>
@@ -380,7 +380,7 @@
     </div>
 
     <p>
-      TODO
+      By varying the density, we change the mass of the cloth. With a lower density, the cloths has fewer and larger folds as it falls on itself. With a higher density, the cloths has more numerous, smaller folds as it falls on itself. By changing ks, we change the spring factor betwen the springs of the point masses that represent our cloth. With a lower spring constant, the cloth has less rigidity, and also has more numerous, smaller folds. With a higher spring constant, the cloth is more rigid, so it has fewer and larger folds.
     </p>
 
 
@@ -394,7 +394,7 @@
     </b></blockquote>
 
     <p>
-      TODO
+      A shader program is a program that runs in parallel on the GPU and simulates lighting and texture effects on objects in a scene. The vertex shaders is the first part of the shader program and modify the geometries of the objects by changing position vertecies and direction normals, and it passes parameters to the second part, the fragment shader. The fragment shader is in charge of computing the color of each pixel in the final images. 
     </p>
 
 
@@ -404,29 +404,29 @@
     </b></blockquote>
 
     <p>
-      TODO
+      The Blinn-Phong shading model is a shading model that simulates the way light interacts with surfaces in a 3D scene. It is composed of 3 components: the ambient component, the diffuse component, and the specular component. The ambient component represents the universal lighting that is present everywhere. The diffuse component represents the light that is scattered in all directions off objects. The specular component represents the shiny light that is scattered in a single direction off objects. Different objects will have different ratios of the components depending on the surface texture.
     </p>
 
     <div align="middle">
       <table style="width:100%">
         <tr align="center">
           <td>
-              <img src="images/t5-blinn-phong-ambient.png" align="middle" width="400px" />
+              <img src="images/q5-phong-ambient.png" align="middle" width="400px" />
               <figcaption>Ambient component only</figcaption>
               
           </td>
           <td>
-              <img src="images/t5-blinn-phong-diffuse.png" align="middle" width="400px" />
+              <img src="images/q5-phong-diffuse.png" align="middle" width="400px" />
               <figcaption>Diffuse component only</figcaption>
           </td>
         </tr>
         <tr align="center">
           <td>
-              <img src="images/t5-blinn-phong-specular.png" align="middle" width="400px" />
+              <img src="images/q5-phong-specular.png" align="middle" width="400px" />
               <figcaption>Specular component only</figcaption>
           </td>
           <td>
-              <img src="images/t5-blinn-phong-all.png" align="middle" width="400px" />
+              <img src="images/q5-phong-complete.png" align="middle" width="400px" />
               <figcaption>Complete Blinn-Phong model</figcaption>
           </td>
         </tr>
@@ -439,7 +439,7 @@
     </b></blockquote>
 
     <div align="middle">
-      <img src="images/t5-custom-texture.png" align="middle" width="100%" />
+      <img src="images/q5-mario.png" align="middle" width="100%" />
     </div>
 
 
@@ -457,22 +457,22 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t5-bump-mapping-cloth.png" align="middle" width="400vw" />
+            <img src="images/q5-bump-cloth.png" align="middle" width="400vw" />
             <figcaption>Bump Mapping on the Cloth</figcaption>
           </td>
           <td>
-            <img src="images/t5-bump-mapping-sphere.png" align="middle" width="400vw" />
+            <img src="images/q5-bump-sphere.png" align="middle" width="400vw" />
             <figcaption>Bump Mapping on the Sphere</figcaption>
           </td>
           <td>
         </tr>
         <tr align="center">
           <td>
-            <img src="images/t5-displacement-mapping-sphere.png" align="middle" width="400vw" />
+            <img src="images/q5-displacement-high-coarse.png" align="middle" width="400vw" />
             <figcaption>Displacement Mapping on the Sphere</figcaption>
           </td>
           <td>
-            <img src="images/t5-displacement-mapping-sphere-2.png" align="middle" width="400vw" />
+            <img src="images/q5-displacement-low-coarse.png" align="middle" width="400vw" />
             <figcaption>Displacement Mapping on the Sphere (coarser mesh)</figcaption>
           </td>
           <td>
@@ -481,7 +481,9 @@
     </div>
 
     <p>
-      TODO
+      Bump mapping and displacement mapping can both add rough surface textures to smooth surfaces efficiently. Bump mapping works by modifying the normals on the object without modifying the underlying gemoetry, allowing it to easily add slight rough texture to the object. Displacement mapping works by modifying the actual verticies of the object, and adjusting the normals to match afterwards, which makes it add much more realistic texture to the object.
+    </br>
+      The coarseness of the spheres had no effect on the bump map shader, but it had a large effect on the displacement map shader. This makes bump maps more versatile for all resolutions of objects, while displacement maps more suitable for high resolution objects. On a lower resolution object, the displacement map created a sort of spiky sphere and did not convey the brick texture well. On the higher resolution object, the displacement map worked very well, and the brick texture is very apparent. You can see the underlying geometry is modified as you can see inbetween the grooves of the brick texture.
     </p>
 
 
@@ -493,11 +495,11 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t5-mirror-shader-cloth.png" align="middle" width="400vw" />
+            <img src="images/q5-mirror-cloth.png" align="middle" width="400vw" />
             <figcaption>Mirror Shader on the Cloth</figcaption>
           </td>
           <td>
-            <img src="images/t5-mirror-shader-sphere.png" align="middle" width="400vw" />
+            <img src="images/q5-mirror-sphere.png" align="middle" width="400vw" />
             <figcaption>Mirror Shader on the Sphere</figcaption>
           </td>
           <td>
@@ -511,7 +513,7 @@
     </b></blockquote>
 
     <p>
-      TODO
+      We did not make a custom shader.
     </p>
   
 
